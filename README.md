@@ -302,10 +302,6 @@ python main.py
 ### 7. 웨어러블 케이스 모델링
 <img width="817" height="688" alt="image" src="https://github.com/user-attachments/assets/db870a0e-abe2-4cee-9077-f69e6831b411" />
 
-### 8. 웨어러블 센서 기기 착용 방식
-<img width="694" height="938" alt="image" src="https://github.com/user-attachments/assets/7d32eb56-e8d7-4581-b838-29756dc52e43" />
-
-
 
 ### 🧠 요약
 - **FI (Fatigue Index)** → 근육 피로 누적 정도  
