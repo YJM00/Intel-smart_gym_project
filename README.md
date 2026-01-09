@@ -22,24 +22,9 @@ EMG·IMU 센서 융합 파워리프팅 스쿼트 분석까지 지원하는 파�
 
 ---
 
-## ✅ **구현 (Done)**
-
-- [x] 카메라 입력 파이프라인 (OpenCV, 고정 해상도)  
-- [x] YOLOv8-Pose(ONNX) 추론 및 COCO17 키포인트 추출  
-- [x] 각도 계산 모듈 (무릎/힙) + 안정화(클램프·스무딩)  
-- [x] 7개 운동 카운트 로직 설계  
-- [x] 점수 매핑 (Good/OK/Retry) + 오버레이 UI (PySide6)  
-- [x] HailoCamAdapter API (`frame()/people()/meta`)  
-- [x] 세션 요약 저장 (SQLite 최소 컬럼)  
-- [x] 데모 스크립트 (3회 수행 → 요약 확인)  
-- [x] EMG/IMU 센서 데이터 수집 (Arduino → Pi5 Bluetooth)  
-- [x] 근육 피로도/불균형 모델 아키텍처 구현 및 프로토타입 생성  
-- [ ] 품질관리 기준 데이터셋 수집 — 센서 공급 지연  
-- [ ] Yocto 빌드 — 디렉토리 경로 불일치 오류 발생  
-
----
-
 ## ⚙️ **주요 기능**
+
+<img width="925" height="372" alt="image" src="https://github.com/user-attachments/assets/efa01696-fd79-4d37-a17b-1f43dc46d913" />
 
 ### 🔹 운동 분류 모델 (AI)
 - **TCN 기반 동작 분류 모델**
@@ -64,7 +49,6 @@ EMG·IMU 센서 융합 파워리프팅 스쿼트 분석까지 지원하는 파�
 
 <img width="839" height="430" alt="image" src="https://github.com/user-attachments/assets/97e1d978-0dcd-4460-b81d-8fe5502806a3" />
 <img width="861" height="485" alt="image" src="https://github.com/user-attachments/assets/eeaca896-b994-43b9-892b-fadff9362e0d" />
-
 
 
 ---
@@ -101,8 +85,6 @@ EMG·IMU 센서 융합 파워리프팅 스쿼트 분석까지 지원하는 파�
 
 https://github.com/user-attachments/assets/f4ce4fb4-64c6-46c4-88ab-7b38399b903d
 
-
-```
 
 ---
 
@@ -158,7 +140,7 @@ https://github.com/user-attachments/assets/f4ce4fb4-64c6-46c4-88ab-7b38399b903d
 
 ### 2. 전처리
 - Arduino 단에서 **EMG 필터링 및 정규화(DC offset 제거)**  
-- IMU를 이용한 **하강/상승 구간 분리 및 템포 추출**  
+- IMU의 기울기값을 이용한 **하강/상승 구간 분리하고 yaw값을 이용해 각 랩당 운동 템포 추출**  
 - 3초간 MVC(Maximum Voluntary Contraction) 측정을 통한 **근수축 기준 정규화**
 
 
@@ -170,6 +152,9 @@ https://github.com/user-attachments/assets/f4ce4fb4-64c6-46c4-88ab-7b38399b903d
 
 
 ### 4. 신호 분석
+<img width="871" height="497" alt="image" src="https://github.com/user-attachments/assets/8ab70e79-a1ab-404b-bbba-56d50bbcb4b7" />
+
+
 - Raspberry Pi에서 실시간 분석 수행  
 - FFT 기반 주파수 도메인 특징 및 시간 도메인 특징 추출  
 
@@ -178,7 +163,7 @@ https://github.com/user-attachments/assets/f4ce4fb4-64c6-46c4-88ab-7b38399b903d
 | **RMS_norm** | 근육 수축 세기(정규화 RMS) | ⬇️ 감소 |
 | **MDF** | 스펙트럼 중심 주파수 | ⬇️ 저주파 쪽 이동 |
 | **SampEn** | 신호의 불규칙성(복잡도) | ⬇️ 더 규칙적 |
-| **MSESEn** | 여러 시간 스케일에서의 복잡도 | ⬇️ 장·단기 패턴 단순화 |
+| **MSESEn** | 주파수 분포의 무질서 | ⬇️ 장·단기 패턴 단순화 |
 | **iEMG_norm** | EMG 적분값(활동량) | ⬇️ 활성 근섬유 감소 |
 | **tempo_cv** | 스쿼트 템포의 변동성(속도 일관성 지표) | ⬆️ 증가 시 불균일한 리듬 |
 
