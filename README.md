@@ -19,20 +19,6 @@ EMG·IMU 센서 융합 파워리프팅 스쿼트 분석까지 지원하는 파�
 - AI 기반 **운동 수행 평가 알고리즘 및 피드백 제공**  
 - **Raspberry Pi / Hailo-8 경량화 및 실시간 처리**
 
----
-
-## 🧩 **구현 범위 (Minimum Viable Product)**
-
-| 항목 | 내용 |
-| --- | --- |
-| **목표** | RPi5 + Hailo-8에서 실시간 스쿼트 카운트·점수·요약 제공 |
-| **입력** | 측면 카메라 (1인 대상) |
-| **처리** | YOLOv8-Pose → 각도(무릎/힙) → 카운트 FSM → 점수 |
-| **출력** | PySide6 오버레이 UI, 세션 리포트(SQLite) |
-| **성능 목표** | FPS ≥ 15 / 지연 < 250ms / 카운트 정확도 ≥ 90% |
-| **비범위** | 다중 인원, EMG/클라우드/3D 분석 |
-| **위험요소** | 런타임 중 프레임 드롭 |
-| **데모 시나리오** | 3회 수행 → 실시간 표시 → 요약 확인 |
 
 ---
 
@@ -83,18 +69,6 @@ EMG·IMU 센서 융합 파워리프팅 스쿼트 분석까지 지원하는 파�
 
 ---
 
-## 👥 **Team: 자세어때**
-
-| 이름 | 역할 | 주요 담당 |
-| --- | --- | --- |
-| **서민솔** | 팀장 | 프로젝트 총괄, 운동 분류 모델 설계 |
-| **이동현** | 부팀장 | 통합 어플리케이션 개발 |
-| **유종민** | 센서 | 센서 신호처리 AI 개발, 3D 모델링 |
-| **윤찬민** | AI 개발 | 운동 분류 모델 구현 |
-| **임정민** | 운동 분석 | 운동 분석 알고리즘 개발,Yocto 개발 |
-
----
-
 ## 🧠 **기술 스택**
 
 | 분야 | 기술 |
@@ -119,13 +93,6 @@ EMG·IMU 센서 융합 파워리프팅 스쿼트 분석까지 지원하는 파�
     <img src="https://img.shields.io/badge/Hailo-000?style=for-the-badge" height="24"/>
   </a>
 </p>
----
-
-## 🚀 **기대 효과**
-
-- 운동 수행 정확도 향상 및 **부상 예방**  
-- 개인 맞춤 피드백을 통한 **훈련 효율 극대화**  
-- AI + 센서 융합 **스마트 피트니스 솔루션 실현**
 
 ---
 
@@ -135,65 +102,9 @@ EMG·IMU 센서 융합 파워리프팅 스쿼트 분석까지 지원하는 파�
 https://github.com/user-attachments/assets/f4ce4fb4-64c6-46c4-88ab-7b38399b903d
 
 
+```
 
 ---
-
-## 🧩 **Clone Code**
-git clone https://github.com/Biomedical-Signal-Processing-Lab/smart_gym_project.git
-
-
-## ⚙️ **Steps to Build**
-
-```
-# 0) 기본 설정
-sudo apt update
-sudo apt install -y git curl wget build-essential pkg-config
-python -m venv .sgym_venv
-source .sgym_venv/bin/activate
-cd smart_gym_project/app
-pip install -r requirements.txt
-
-# 1) Hailo (공식 APT 레포 추가 후 설치)
-# ⚠️ 반드시 벤더 문서 절차에 따라 레포를 먼저 등록해야 합니다.
-sudo apt install -y hailo-all
-
-# 2) GStreamer 런타임 + 플러그인 묶음
-sudo apt install -y \
-  gstreamer1.0-tools gstreamer1.0-plugins-base gstreamer1.0-plugins-good \
-  gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav \
-  gstreamer1.0-gl gstreamer1.0-alsa
-
-# 3) GI(PyGObject) 바인딩 (Python에서 GStreamer를 사용하는 경우)
-sudo apt install -y \
-  python3-gi python3-gi-cairo gobject-introspection \
-  gir1.2-gstreamer-1.0 gir1.2-gst-plugins-base-1.0 libgirepository1.0-dev
-
-# 4) 카메라 유틸리티 설치
-sudo apt install -y v4l-utils libcamera-apps
-
-```
-## ▶️ **Step to Run**
-```
-# 1) 가상환경 활성화
-source .sgym_venv/bin/activate
-
-# 2) 프로젝트 실행
-python main.py
-
-
----
-
-> 💡 **Tip:**  
-> 첫 실행 시 `.venv` 환경을 다시 활성화해야 합니다:  
-> ```bash
-> source .sgym_venv/bin/activate
-> 
-> 실행 후 UI 창이 뜨면, 센서 연결 상태와 카메라 입력이 정상 동작하는지 로그를 확인하세요.
-
----
-
-
-```
 
 ## 🧩 **운동 분류 시스템**
 
@@ -320,13 +231,59 @@ python main.py
 
 ---
 
-## ⚙️ **시행착오 및 해결방안**
+## 🧩 **Clone Code**
+git clone https://github.com/Biomedical-Signal-Processing-Lab/smart_gym_project.git
 
-| **No.** | **시행착오** | **해결 방안** | **결과 / 교훈** |
-| :---: | --- | --- | --- |
-| 1 | 프로토타입(**MediaPipe**) ↔ 배포(**Hailo-8, COCO-17**) **포즈 스키마 불일치**로 입력 붕괴 | **COCO-17 기준 전 파이프라인 정렬** (키포인트 매핑 / 좌표·정규화 통일) + 데이터·레이블 **재생성·재학습** | 배포 타깃 스키마 **데이터 계약** 고정 · 스키마 변경 시 **어댑터·회귀 테스트·버전 태깅** 필수 |
-| 2 | 오프라인 지표 우수 ↔ 실사용에서 **숄더프레스·덤벨로우 혼동** (유사 패턴, 시간 특성 미활용 / 지름길) | 정규화 키포인트에 **속도·가속도 (1차/2차 차분)** 채널 추가 → **TCN 입력 다채널화** (윈도우 60, stride 1) | 지름길 억제 · 유사 클래스 **분리도↑** · 경계 흔들림 **완화** (히스테리시스 / 스무딩) |
-| 3 | 기본 카메라 **FOV 협소**로 공간 제약·스케일 변동 | **광각 카메라 전환**, **왜곡 보정 없이** 광각 전용 데이터 **재수집·재학습** | 배포 **광학 스펙을 데이터 계약**으로 고정 · 보정 미적용 시 **훈련=추론 조건 일치** 유지 |
+
+## ⚙️ **Steps to Build**
+
+```
+# 0) 기본 설정
+sudo apt update
+sudo apt install -y git curl wget build-essential pkg-config
+python -m venv .sgym_venv
+source .sgym_venv/bin/activate
+cd smart_gym_project/app
+pip install -r requirements.txt
+
+# 1) Hailo (공식 APT 레포 추가 후 설치)
+# ⚠️ 반드시 벤더 문서 절차에 따라 레포를 먼저 등록해야 합니다.
+sudo apt install -y hailo-all
+
+# 2) GStreamer 런타임 + 플러그인 묶음
+sudo apt install -y \
+  gstreamer1.0-tools gstreamer1.0-plugins-base gstreamer1.0-plugins-good \
+  gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav \
+  gstreamer1.0-gl gstreamer1.0-alsa
+
+# 3) GI(PyGObject) 바인딩 (Python에서 GStreamer를 사용하는 경우)
+sudo apt install -y \
+  python3-gi python3-gi-cairo gobject-introspection \
+  gir1.2-gstreamer-1.0 gir1.2-gst-plugins-base-1.0 libgirepository1.0-dev
+
+# 4) 카메라 유틸리티 설치
+sudo apt install -y v4l-utils libcamera-apps
+
+```
+## ▶️ **Step to Run**
+```
+# 1) 가상환경 활성화
+source .sgym_venv/bin/activate
+
+# 2) 프로젝트 실행
+python main.py
+
+
+---
+
+> 💡 **Tip:**  
+> 첫 실행 시 `.venv` 환경을 다시 활성화해야 합니다:  
+> ```bash
+> source .sgym_venv/bin/activate
+> 
+> 실행 후 UI 창이 뜨면, 센서 연결 상태와 카메라 입력이 정상 동작하는지 로그를 확인하세요.
+
+
 
 ---
 
@@ -352,6 +309,20 @@ python main.py
 - 센서가 여러 개일수록 **타이밍·동기화 관리**가 프로젝트의 성패를 좌우한다.  
 - 데이터가 부족한 상황에서는 **특징기반 접근(Feature Engineering)** 이 실용적이며,  
   장기적으로는 **딥러닝 전이(Feature Learning)** 으로 확장할 수 있다.
+
+
+---
+
+
+## 👥 **Team: 자세어때**
+
+| 이름 | 역할 | 주요 담당 |
+| --- | --- | --- |
+| **서민솔** | 팀장 | 프로젝트 총괄, 운동 분류 모델 설계 |
+| **이동현** | 부팀장 | 통합 어플리케이션 개발 |
+| **유종민** | 센서 | 센서 신호처리 AI 개발, 3D 모델링 |
+| **윤찬민** | AI 개발 | 운동 분류 모델 구현 |
+| **임정민** | 운동 분석 | 운동 분석 알고리즘 개발,Yocto 개발 |
 
 
 ---
